@@ -1,25 +1,20 @@
 var React=require("react");
 var actions=require("./actions");
 var Controls=React.createClass({
-	randomContent:function() {
-		var out="";
-		var c=Math.floor((Math.random()*20)+3);
-		for (var i=0;i<c;i++) {
-			var code=Math.floor(Math.random()*20000)+0x4e00;
-			out+=String.fromCharCode(code);
-		}
-		return out;
-	}	
- 	,add:function() {
-		actions.add(this.randomContent());
+	open:function(e) {
+		actions.getDef(this.refs.tofind.getDOMNode().value);
 	}
-	,clear:function() {
+	,keypress:function(e) {
+		if (e.key=="Enter") this.open(e);
+	}
+	,reset:function() {
 		actions.clear();
 	}
 	,render:function() {
 		return <div>
-      		<button onClick={this.add}>Add</button>
-      		<button onClick={this.clear}>Clear</button>
+      		<input onKeyPress={this.keypress} size={4} style={{fontSize:"200%"}} ref="tofind" defaultValue="四諦"></input>
+      		<button onClick={this.open}>Open</button>
+      		<button onClick={this.reset}>Reset</button>
       	</div>
 	}
 });

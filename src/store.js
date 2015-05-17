@@ -5,6 +5,7 @@ var kde=require("ksana-database");
 var store=Reflux.createStore({
 	listenables:actions
 	,getDef:function(entry) {
+		this.onClose(entry);
 		var fseg=this.db.findSeg(entry,1)[0];
 		this.db.get(["filecontents",fseg.file,fseg.seg],function(data){
 				this.onAdd(entry,data);
@@ -13,7 +14,6 @@ var store=Reflux.createStore({
 	,init:function() {
 		kde.open("moedict",function(err,db){
 			this.db=db;
-			this.getDef("四諦");
 		},this);
 	}
 	,data:[]
@@ -22,7 +22,6 @@ var store=Reflux.createStore({
 		this.trigger(this.data);
 	}
 	,onClose:function(entry) {
-		if (this.data.length<2) return;
 		for (var i=0;i<this.data.length;i++) {
 			if (this.data[i][0]==entry) {
 				this.data.splice(i,1);
@@ -30,7 +29,6 @@ var store=Reflux.createStore({
 				break;
 			}
 		}
-
 	}
 	,onClear:function() {
 		this.data=[];
